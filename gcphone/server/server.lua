@@ -58,18 +58,22 @@ function getSourceFromIdentifier(identifier, cb)
     end)
     cb(nil)
 end
-function getNumberPhone(identifier)
-    local result = MySQL.Sync.fetchAll("SELECT users.phone_number FROM users WHERE users.identifier = @identifier", {
-        ['@identifier'] = identifier
+function getNumberPhone(identifier, sourcePlayer)
+    local civId = TriggerEvent('gec:getCurrentCivId', sourcePlayer)
+    local result = MySQL.Sync.fetchAll("SELECT users.phone_number FROM civ_accounts WHERE users.identifier = @identifier and users.id = @civId", {
+        ['@identifier'] = identifier,
+        ['@civId'] = civId
     })
     if result[1] ~= nil then
         return result[1].phone_number
     end
     return nil
 end
-function getIdentifierByPhoneNumber(phone_number)
-    local result = MySQL.Sync.fetchAll("SELECT users.identifier FROM users WHERE users.phone_number = @phone_number", {
-        ['@phone_number'] = phone_number
+function getIdentifierByPhoneNumber(phone_number, sourcePlayer)
+    local civId = TriggerEvent('gec:getCurrentCivId', sourcePlayer)
+    local result = MySQL.Sync.fetchAll("SELECT users.identifier FROM civ_accounts WHERE users.phone_number = @phone_number and users.id = @civId", {
+        ['@phone_number'] = phone_number,
+        ['@civId'] = civId
     })
     if result[1] ~= nil then
         return result[1].identifier
@@ -100,7 +104,7 @@ function getOrGeneratePhoneNumber (sourcePlayer, identifier, cb)
             myPhoneNumber = getPhoneRandomNumber()
             local id = getIdentifierByPhoneNumber(myPhoneNumber)
         until id == nil
-        MySQL.Async.insert("UPDATE users SET phone_number = @myPhoneNumber WHERE identifier = @identifier and civId = @civId", {
+        MySQL.Async.insert("UPDATE civ_accounts SET phone_number = @myPhoneNumber WHERE identifier = @identifier and civId = @civId", {
             ['@myPhoneNumber'] = myPhoneNumber,
             ['@identifier'] = identifier,
             ['@civId'] = civId
