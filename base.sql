@@ -18,6 +18,7 @@ ALTER TABLE `users` ADD COLUMN `phone_number` VARCHAR(10) NULL;
 -- Export de la structure de la table gtarp. phone_app_chat
 CREATE TABLE IF NOT EXISTS `phone_app_chat` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  'civId', int(11) NOT NULL,
   `channel` varchar(20) NOT NULL,
   `message` varchar(255) NOT NULL,
   `time` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -41,6 +42,7 @@ CREATE TABLE IF NOT EXISTS `phone_calls` (
 CREATE TABLE IF NOT EXISTS `phone_messages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `transmitter` varchar(10) NOT NULL,
+  'civId' int(11) NOT NULL,
   `receiver` varchar(10) NOT NULL,
   `message` varchar(255) NOT NULL DEFAULT '0',
   `time` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -54,6 +56,7 @@ CREATE TABLE IF NOT EXISTS `phone_messages` (
 CREATE TABLE IF NOT EXISTS `phone_users_contacts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `identifier` varchar(60) CHARACTER SET utf8mb4 DEFAULT NULL,
+  'civId' int(11) NOT NULL,
   `number` varchar(10) CHARACTER SET utf8mb4 DEFAULT NULL,
   `display` varchar(64) CHARACTER SET utf8mb4 NOT NULL DEFAULT '-1',
   PRIMARY KEY (`id`)
